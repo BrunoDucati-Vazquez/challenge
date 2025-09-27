@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.kan.challenge.domains.Documents.Document;
 import com.kan.challenge.services.Document.DocumentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -58,10 +60,19 @@ public class DocumentController {
         return ResponseEntity.ok(responseDTO);
     }
     
+
     @DeleteMapping("/documents/{id}")
-    public ResponseEntity<DocumentResponseDTO> deleteDocument(@PathVariable Integer id) {
-        Document deletedDocument = documentService.deleteDocumentByID(id);
-        DocumentResponseDTO responseDTO = DocumentResponseDTO.fromDocumentEntity(deletedDocument);
-        return ResponseEntity.ok(responseDTO);
+    public ResponseEntity<Object> deleteDocument(@PathVariable Integer id, @RequestHeader(value = "Authorization", required = true) String authorization) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token não fornecido ou formato inválido");
+        }
+        String token = authorization.substring(7);
+        if (!com.kan.challenge.controllers.AuthController.VALID_TOKENS.contains(token)) {
+            return ResponseEntity.status(403).body("Token inválido");
+        }else {
+            Document deletedDocument = documentService.deleteDocumentByID(id);
+            DocumentResponseDTO responseDTO = DocumentResponseDTO.fromDocumentEntity(deletedDocument);
+            return ResponseEntity.ok(responseDTO);
+        }
     }
 }
