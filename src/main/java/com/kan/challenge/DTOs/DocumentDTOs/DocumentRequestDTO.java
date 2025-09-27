@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
 
+import com.kan.challenge.domains.Documents.Document;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,4 +18,11 @@ public class DocumentRequestDTO {
 	private Date createdAt;
 	private Date updatedAt;
 	private Integer recipientId;
+
+	public Document toDocumentEntity() {
+		Document document = new Document();
+		document.setDocumentType(this.documentType);
+		document.setDescription(this.description);
+		return document;
+	}
 }

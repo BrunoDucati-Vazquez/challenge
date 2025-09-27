@@ -20,7 +20,7 @@ public class DocumentResponseDTO {
 	private Date updatedAt;
 	private Integer recipientId;
 
-    public static DocumentResponseDTO fromDomain(Document document) {
+    public static DocumentResponseDTO fromDocumentEntity(Document document) {
         DocumentResponseDTO dto = new DocumentResponseDTO();
         dto.setId(document.getId());
         dto.setDocumentType(document.getDocumentType());
@@ -29,6 +29,5 @@ public class DocumentResponseDTO {
         dto.setUpdatedAt(document.getUpdatedAt());
         dto.setRecipientId(document.getRecipient() != null ? document.getRecipient().getId() : null);
         return dto;
-
     }
 }
