@@ -28,7 +28,7 @@ public class DocumentService {
             .orElseThrow(() -> new RuntimeException("Recipient not found"));
 
         document.setCreatedAt(new java.util.Date());
-        document.setUpdatedAt(new java.util.Date()); // Garante que updatedAt não seja preenchido na criação
+        document.setUpdatedAt(new java.util.Date());
         document.setRecipient(recipient);
         return documentRepository.save(document);
     }
